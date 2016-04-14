@@ -11,14 +11,14 @@ public class Main {
 		frame.getContentPane().setLayout(new BorderLayout());
 
 		SpaceShip s = new SpaceShip(180, 500, 20, 20);
-		GamePanel g = new GamePanel();
-		g.sprites.add(s);
-		g.updateGameUI();
-
-		frame.getContentPane().add(g, BorderLayout.CENTER);
-		frame.setVisible(true);
-		
+		GamePanel gp = new GamePanel();
+		GameEngine ge = new GameEngine(gp, s);
 	
+
+		frame.addKeyListener(ge);
+		frame.getContentPane().add(gp, BorderLayout.CENTER);
+		frame.setVisible(true);
+		ge.start();
 		
 		
 	}
