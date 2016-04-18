@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.Timer;
 
@@ -66,11 +67,24 @@ public class GameEngine implements KeyListener{
 		}
 
 
+		Rectangle2D.Double vr = v.getRectangle();
+		Rectangle2D.Double er;
+		for(Enemy e : enemies){
+			er = e.getRectangle();
+			if(er.intersects(vr)){
+				die();
+				return;
+			}
+		}	
+
 		gp.updateGameUI();
 	}
+
+	public void die(){
+		timer.stop();
+	}
 	
-	
-	void controlVehicle(KeyEvent e) {
+	public void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			v.move(-1);
