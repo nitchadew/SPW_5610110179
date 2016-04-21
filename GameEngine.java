@@ -10,13 +10,14 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.Timer;
 
 
-public class GameEngine implements KeyListener{
+public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;	
 	private Timer timer;
 	private double difficulty = 0.1;
+	private long score = 0;
 
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -63,6 +64,7 @@ public class GameEngine implements KeyListener{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
+				score += 1;
 			}
 		}
 
@@ -77,7 +79,7 @@ public class GameEngine implements KeyListener{
 			}
 		}	
 
-		gp.updateGameUI();
+		gp.updateGameUI(this);
 	}
 
 	public void die(){
@@ -93,6 +95,10 @@ public class GameEngine implements KeyListener{
 			v.move(1);
 			break;
 		}
+	}
+
+	public long getScore(){
+		return score;
 	}
 	
 	@Override

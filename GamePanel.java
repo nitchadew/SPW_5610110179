@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -21,8 +20,9 @@ public class GamePanel extends JPanel {
 		big.setBackground(Color.BLACK);
 	}
 
-	public void updateGameUI(){
+	public void updateGameUI(GameEngine reporter){
 		big.clearRect(0, 0, 400, 600);
+		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
 		
 		for(Sprite s : sprites){
 			s.draw(big);
