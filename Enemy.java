@@ -8,9 +8,11 @@ public class Enemy extends Sprite{
 	
 	private int step = 12;
 	private boolean alive = true;
+	private boolean clashable = true;
+
 	
-	public Enemy(int x, int y) {
-		super(x, y, 5, 10);
+	public Enemy(int position_x, int position_y, int size_x, int size_y) {
+		super(position_x, position_y, size_x, size_y);
 		
 	}
 
@@ -22,7 +24,11 @@ public class Enemy extends Sprite{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		g.setColor(Color.RED);
+		
+		if(width == 5)
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.YELLOW);
 		g.fillRect(x, y, width, height);
 		
 	}
@@ -36,5 +42,13 @@ public class Enemy extends Sprite{
 	
 	public boolean isAlive(){
 		return alive;
+	}
+
+	public boolean getClashable(){
+		return clashable;
+	}
+
+	public void setClashable(boolean set){
+		clashable = set;
 	}
 }
