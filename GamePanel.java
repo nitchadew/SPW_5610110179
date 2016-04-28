@@ -15,7 +15,8 @@ public class GamePanel extends JPanel {
 	
 	private BufferedImage bi;	
 	Graphics2D big;
-	Graphics2D bigfade;
+	Graphics2D bigfadeenemy;
+	Graphics2D bigheal;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	BufferedImage background;
 
@@ -23,7 +24,8 @@ public class GamePanel extends JPanel {
 
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		bigfade = (Graphics2D) bi.getGraphics();
+		bigfadeenemy = (Graphics2D) bi.getGraphics();
+		bigheal = (Graphics2D) bi.getGraphics();
 		//big.setBackground(Color.BLUE);
 		try{
 			background = ImageIO.read(new File("C:/Users/Administrator/Documents/GitHub/SPW_5610110179/space8bit.jpg"));
@@ -38,14 +40,17 @@ public class GamePanel extends JPanel {
 		big.clearRect(0, 0, 400, 600);
 		big.drawImage(background, 0, 0, 400, 600, null);
 		big.setColor(Color.RED);
-		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
-		big.drawString(String.format("%01d", reporter.getLifepoint()), 25, 20);
-		
+		big.drawString(String.format("%08d", reporter.getScore()), 310, 20);
+		big.drawString(String.format("%d", reporter.getLevel()), 290, 20);
+		big.drawString("LV",275, 20);
+
 		for(Sprite s : sprites){
-			if(s.width == 15)
+			if(s.width == 15 || s.height == 20)
 				s.draw(big);
+			else if(s.width == 5)
+				s.draw(bigheal);
 			else
-				s.draw(bigfade);
+				s.draw(bigfadeenemy);
 
 		}
 		
