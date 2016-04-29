@@ -7,8 +7,8 @@ public class LifePoint extends Sprite{
 	private boolean clashable = true;
 
 	
-	public LifePoint(int position_x, int position_y, int size_x, int size_y) {
-		super(position_x, position_y, size_x, size_y);
+	public LifePoint(int position_x, int position_y, int size_x, int size_y, String type) {
+		super(position_x, position_y, size_x, size_y, type);
 		
 	}
 

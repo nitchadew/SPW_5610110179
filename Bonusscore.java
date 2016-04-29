@@ -2,15 +2,15 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Enemy extends Sprite{
+public class Bonusscore extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
-	private int step = 12;
+	private int step = 22;
 	private boolean alive = true;
 	private boolean clashable = true;
 
 	
-	public Enemy(int position_x, int position_y, int size_x, int size_y, String type) {
+	public Bonusscore(int position_x, int position_y, int size_x, int size_y, String type) {
 		super(position_x, position_y, size_x, size_y, type);
 		
 	}
@@ -23,11 +23,7 @@ public class Enemy extends Sprite{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		
-		if(width == 5)
-			g.setColor(Color.RED);
-		else
-			g.setColor(Color.YELLOW);
+		g.setColor(Color.ORANGE);
 		g.fillRect(x, y, width, height);
 		
 	}
@@ -50,4 +46,5 @@ public class Enemy extends Sprite{
 	public void setClashable(boolean set){
 		clashable = set;
 	}
+
 }

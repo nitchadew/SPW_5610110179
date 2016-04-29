@@ -16,7 +16,8 @@ import java.lang.*;
 public class GameEngine implements KeyListener{
 	private GamePanel gp;		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Heal> heals = new ArrayList<Heal>();		
+	private ArrayList<Heal> heals = new ArrayList<Heal>();
+	private ArrayList<Bonusscore> bonuss = new ArrayList<Bonusscore>();		
 	private SpaceShip v;	
 	private Timer timer;
 	private String name;
@@ -25,9 +26,14 @@ public class GameEngine implements KeyListener{
 	private int readscore;
 	private int topscore;
 	private LifePoint life;
+	private LifePoint heightlife1;
+	private LifePoint widthlife1;
+	private LifePoint widthlife2;
+	private LifePoint heightlife2;
 	private int level = 1;
 	private double healitem= 0.003;
-	private double generate = 0.1;
+	private double bonusitem = 0.003;
+	private double generate = 0.1;	
 	private double biggenerate = 0.01;
 	private double addhealitem= 0.001;
 	private double addgenerate  = 0.02;
@@ -35,7 +41,8 @@ public class GameEngine implements KeyListener{
 	private long score = 0;
 	private int generatecount = 0;
 	private long diff = 0;
-	private boolean triker = false;
+	private boolean trigger = false;
+	
 
 
 	
@@ -45,9 +52,17 @@ public class GameEngine implements KeyListener{
 		
 		gp.sprites.add(v);
 
-		life = new LifePoint(10, 10, 100, 20);
+
+		life = new LifePoint(12, 12, 100, 15, "l");
+		heightlife1 = new LifePoint(8, 10, 1, 20, "l");
+		widthlife1 = new LifePoint(8, 9, 108, 1, "l");
+		widthlife2 = new LifePoint(8, 29, 108, 1, "l");
+		heightlife2 = new LifePoint(115, 10, 1, 20, "l");
 		gp.sprites.add(life);
-		
+		gp.sprites.add(heightlife1);
+		gp.sprites.add(widthlife1);
+		gp.sprites.add(widthlife2);
+		gp.sprites.add(heightlife2);
 		timer = new Timer(50, new ActionListener() {
 			
 			@Override
@@ -66,16 +81,24 @@ public class GameEngine implements KeyListener{
 	
 
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*390), 30, 5, 10);
+		Enemy e = new Enemy((int)(Math.random()*390), 30, 5, 10,"e");
 		gp.sprites.add(e);
 		enemies.add(e);
 
 	}
 
-	private void generateHeal(){
-		Heal h = new Heal((int)(Math.random()*390), 30, 10, 10);
-		gp.sprites.add(h);
-		heals.add(h);
+	private void generateHeal(int times){
+		for(int i = 0; i < times; i++){	
+			Heal h = new Heal((int)(Math.random()*390), 30, 10, 10, "h");
+			gp.sprites.add(h);
+			heals.add(h);
+		}
+	}
+
+	private void generateBonus(){
+		Bonusscore b = new Bonusscore((int)(Math.random()*390), 30, 10, 10,"b");
+		gp.sprites.add(b);
+		bonuss.add(b);
 
 	}
 
@@ -83,9 +106,9 @@ public class GameEngine implements KeyListener{
 	private void bigGenerateEnemy(){
 		Enemy e;
 		if(Math.random() > 0.5)
-			e = new Enemy((int)(Math.random()*390), 30, 30, 50);
+			e = new Enemy((int)(Math.random()*390), 30, 30, 50, "e");
 		else
-			e = new Enemy((int)(Math.random()*390), 30, 50, 30);
+			e = new Enemy((int)(Math.random()*390), 30, 50, 30, "e");
 		gp.sprites.add(e);
 		enemies.add(e);
 
@@ -94,7 +117,11 @@ public class GameEngine implements KeyListener{
 
 	private void process(){
 		if(Math.random() < healitem){
-			generateHeal();
+			generateHeal(1);
+		}
+
+		if(Math.random() < bonusitem){
+			generateBonus();
 		}
 
 		if(Math.random() < generate){
@@ -106,46 +133,53 @@ public class GameEngine implements KeyListener{
 		}
 
 
+
+
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
 
+			
+
 			if(diff > score % 300)
-				triker = true;
+				trigger = true;
 
 			diff = score % 300;
-
 
 			if(!e.isAlive()){
 				generatecount++;
 				if(e.width == 5){
 					score += 1;
-					if( ( timer.getDelay() >= 10 ) && ( triker == true ) ){
-						timer.setDelay(timer.getDelay() - 5);
+					if(trigger == true){
+						if(timer.getDelay() > 25)
+							timer.setDelay(timer.getDelay() - 5);
+						generateHeal(13);
 						generate = generate + addgenerate;
 						biggenerate = biggenerate + addbiggenerate;
 						healitem = healitem + addhealitem;
-						triker = false;
+						trigger = false;
 						level++;
 					}
 				}	
 					
 				if(e.width == 30 || e.width == 50){
 					score += 10;
-					if( ( timer.getDelay() >= 10 ) && ( triker == true ) ){
-						timer.setDelay(timer.getDelay() - 5);
+					if(trigger == true){
+						if(timer.getDelay() > 25)
+							timer.setDelay(timer.getDelay() - 5);
+						generateHeal(13);
 						generate = generate + addgenerate;
 						biggenerate = biggenerate + addbiggenerate;
 						healitem = healitem + addhealitem;
-						triker = false;
+						trigger = false;
 						level++;
 					}
 				}	
 
 				e_iter.remove();
 				gp.sprites.remove(e);
-					
+				
 			}
 		}
 
@@ -189,7 +223,28 @@ public class GameEngine implements KeyListener{
 					life.setLifepoint(20);
 			}
 
+		}
+
+
+		Iterator<Bonusscore> b_iter = bonuss.iterator();
+		while(b_iter.hasNext()){
+			Bonusscore b = b_iter.next();
+			b.proceed();
+			if(!b.isAlive()){
+					gp.sprites.remove(b);
+					b_iter.remove();
+			}
+			
+			er = b.getRectangle();
+			if (er.intersects(vr)){
+				gp.sprites.remove(b);
+				b_iter.remove();
+				score += 200;
+			}
+
 		}	
+
+
 				gp.updateGameUI(this);
 	}
 
@@ -200,7 +255,7 @@ public class GameEngine implements KeyListener{
 		try {
      		FileWriter writer = new FileWriter("topscore.txt",true);
      		BufferedWriter out = new BufferedWriter(writer);
-      		out.write(name + ":" + score + "\n");
+      		out.write("[" + "Lvl-" + level + "]" + name + ":" + score + "\n");
       		out.close();
    		}catch (Exception e) {
       		System.out.println("Error1: " + e.getMessage());

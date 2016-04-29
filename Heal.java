@@ -5,14 +5,13 @@ import java.awt.Graphics2D;
 public class Heal extends Sprite{
 	public static final int Y_TO_FADE = 400;
 	public static final int Y_TO_DIE = 600;
-	
-	private int step = 12;
+	private int step = 18;
 	private boolean alive = true;
 	private boolean clashable = true;
 
 	
-	public Heal(int position_x, int position_y, int size_x, int size_y) {
-		super(position_x, position_y, size_x, size_y);
+	public Heal(int position_x, int position_y, int size_x, int size_y, String type) {
+		super(position_x, position_y, size_x, size_y, type);
 		
 	}
 
